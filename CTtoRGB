@@ -1,0 +1,43 @@
+// v1.1 13-12-2016
+// Thomas van de Werff
+
+/*
+   function to convert a color temperature in Kelvin to RGB values
+   the algorithm is not calibrated! It is derived from http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+   you can also try it manually. Have a look: http://www.vendian.org/mncharity/dir3/blackbody/UnstableURLs/bbr_color.html
+*/
+
+// This function returns an integer array
+// use it as follows:
+
+int[] RGB = CTtoRGB(1700);    // create an int array with the CT value you want
+int red = RGB[0];             //the first value gives you the RED value
+int green = RGB[1];           //the second value gives you the GREEN value
+int blue = RGB[2];            //the third value gives you the BLUE value
+
+int[] CTtoRGB(int kelvin)
+{
+  int temp = kelvin / 100;
+  float r, g, b;
+
+  if( temp <= 66 ){ 
+      r = 255; 
+      g = temp;
+      g = 99.4708025861 * log(g) - 161.1195681661;
+      if( temp <= 19){
+          b = 0;
+      } else {
+          b = temp-10;
+          b = 138.5177312231 * log(b) - 305.0447927307;
+      }
+  } else {
+      r = temp - 60;
+      r = 329.698727446 * pow(r, -0.1332047592);
+      g = temp - 60;
+      g = 288.1221695283 * pow(g, -0.0755148492 );
+      b = 255;
+  }
+  
+  int[] rgb = {int(r), int(g), int(b)};
+  return rgb;
+}
